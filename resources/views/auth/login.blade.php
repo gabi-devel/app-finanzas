@@ -65,9 +65,24 @@
                             </div>
                         </div>
                     </form>
+
+
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div class="container mt-5">
+    <div class="d-flex justify-content-center mt-4">
+        <div class="row mb-0">
+            <div class="col-md-10 offset-md-2 text-center">
+                <img src="http://app-finanzas.test/img/google.png" alt="Google Logo" style="max-width: 150px; height: auto;">
+                <a href="{{ url('/login-google') }}" class="btn text-primary btn-block">
+                    <h2>{{ __('Login with Google') }}</h2>   
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection

@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,3 +37,31 @@ require __DIR__.'/auth.php';
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+// Google
+ 
+Route::get('/login-google', function () { // va en el boton para redirigir con google
+    return Socialite::driver('google')->redirect();
+});
+ 
+Route::get('/google-callback', function () {
+    $user = Socialite::driver('google')->user();
+    //dd($user);
+
+    $userExists = User::where('external_id', $user->id)->where('external_auth', 'google')->first();
+    if($userExists) {
+        Auth::login($userExists);
+    } else {
+        $newUser = User::create([
+            'name' => $user->name,
+            'email' => $user->email,
+            'avatar' => $user->avatar,
+            'external_id' => $user->id,
+            'external_auth' => 'google'
+        ]);
+
+        Auth::login($newUser);
+    }
+    return redirect('/home');
+});
